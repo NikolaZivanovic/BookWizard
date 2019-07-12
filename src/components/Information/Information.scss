@@ -1,0 +1,46 @@
+.Container {
+    display: flex;
+    flex-direction: column;
+    padding: 5em 0;
+}
+.InformationInput {
+    width: 100%;
+    margin: 1em 1em 0 0  !important;
+}
+
+.PagesInput {
+    width: 25%;
+    margin: 1em 1em 0 0  !important;
+}
+
+.FormatInput {
+    width: 30%;
+    margin: 1em 1em 0 0  !important;
+}
+
+.DatePicker {
+    width:30%;
+    margin: 1em 1em 0 0  !important;
+}
+
+.EditionContainer {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.EditionElements {
+    width: 30%;
+    display: flex;
+    align-items: center;
+}
+
+.EditionElementsInput {
+    width: 100%;
+    margin: 1em 0 0 0 !important;
+}
+
+.EditionElementsSelect {
+    width: 100%;
+    margin: 1em 0 0 1em !important;
+}

@@ -1,0 +1,45 @@
+:global {
+    .position-relative {
+        position: relative;
+    }
+
+    .vertical-top {
+        vertical-align: top;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-to-uppercase {
+        text-transform: uppercase !important;
+    }
+
+    .p {
+        padding: 1em;
+    }
+
+    .pt {
+        padding-top: 1em;
+    }
+
+    .mt {
+        margin-top: 1em;
+    }
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
+
+    .color-error {
+        color: $colorFailRed;
+    }
+
+    .color-success {
+        color: $colorSuccessGreenDark;
+    }
+
+    .hidden {
+        display: none;
+    }
+}

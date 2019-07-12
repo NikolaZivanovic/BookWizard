@@ -1,0 +1,5 @@
+{
+    "IS_CONSOLE_VISIBLE": true,
+
+    "AJAX_REQUEST_DEFAULT_TIMEOUT": 30000
+}

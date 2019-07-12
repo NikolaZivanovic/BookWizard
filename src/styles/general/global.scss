@@ -1,0 +1,53 @@
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    color: $colorGreyLight;
+    padding: 5em 10em;
+}
+
+div {
+    outline: none;
+}
+
+a,
+button,
+input[type="button"],
+input[type="submit"],
+textarea{
+    display: inline-block;
+    text-decoration: none;
+    outline: none;
+    transition: all 0.15s;
+}
+
+input {
+    outline: none;
+}
+
+button, a {
+    cursor: pointer;
+}
+
+select {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -webkit-padding-end: 20px;
+    -moz-padding-end: 20px;
+    -webkit-padding-start: 2px;
+    -moz-padding-start: 2px;
+
+    background-position: 97% 50% !important;
+    background-repeat: no-repeat !important;
+    background-size: 0.75em !important;
+    padding-right: 1.25em !important;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
