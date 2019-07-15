@@ -30,6 +30,7 @@ class Footer extends Component {
 
     finishButtonHandler = () => {
         if(this.isProcessComplete()){
+            // dispatch API call here and check for errors before opening success
             this.setState(prevState => ({
                 isDialogOpen: !prevState.isDialogOpen,
                 success: true
@@ -37,7 +38,6 @@ class Footer extends Component {
         } else {
             this.setState(prevState => ({
                 isDialogOpen: !prevState.isDialogOpen,
-
             }))
         }
     };
@@ -118,6 +118,7 @@ Footer.propTypes = {
     addSubgenre: PropTypes.object,
     information: PropTypes.object,
     clearReducers: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({

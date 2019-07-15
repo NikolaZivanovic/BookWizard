@@ -30,6 +30,8 @@ const subgenreInputSuccess = (state, payload) => {
         newState.data = [];
     } else if (newState.data.includes(data)) {
         newState.data.splice( newState.data.indexOf(data), 1 )
+    } else if (payload === 'remove') {
+        newState.data = INIT_STATE_SUBGENRE.data
     }
     else {
         newState.data.push(data);

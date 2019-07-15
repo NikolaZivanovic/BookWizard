@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
+import styles from './ConfirmationDialog.scss';
 
 const MESSAGE = {
     success: "Book successfully added!",
@@ -28,9 +29,18 @@ class ConfirmationDialog extends Component {
 
     render() {
         return (
-            <Dialog onClose={this.props.onClose} aria-labelledby="simple-dialog-title" open={this.props.open}>
-                <DialogTitle id="simple-dialog-title">{this.props.success && MESSAGE.success || MESSAGE.error}</DialogTitle>
+            <Dialog
+                fullWidth={true}
+                maxWidth='sm'
+                onClose={this.props.onClose}
+                aria-labelledby="simple-dialog-title"
+                open={this.props.open}
+            >
+                <DialogTitle id="simple-dialog-title" className={styles.DialogTitle}>
+                    {this.props.success && MESSAGE.success || MESSAGE.error}
+                </DialogTitle>
                 <Button
+                    className={styles.DialogButton}
                     onClick={() => this.handleOnClick()}
                     variant='contained'
                     size="large"
@@ -46,7 +56,6 @@ class ConfirmationDialog extends Component {
             </Dialog>
         )
     }
-
 }
 
 ConfirmationDialog.propTypes = {

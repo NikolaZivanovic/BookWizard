@@ -23,7 +23,7 @@ const genreInputSuccess = (state, payload) => {
         newState.data.splice( newState.data.indexOf(payload), 1 )
     }
     else {
-        newState.data.push(payload);
+        newState.data.push(...payload);
     }
     return newState;
 };

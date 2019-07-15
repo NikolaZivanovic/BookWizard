@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom'
-import {inputSubgenre} from "./Subgenre.actions";
+import {inputSubgenre, addSubgenreSelected} from "./Subgenre.actions";
 import Button from '@material-ui/core/Button';
 import styles from './Subgenre.scss';
 import APP_ROUTES from 'Config/appRoutes';
@@ -14,9 +14,10 @@ class Subgenre extends Component {
     state = {};
 
     componentDidMount() {
+        this.removeSubgenresFromReducer(this.subgenres);
         this.subgenres.forEach(subgenre => {
             this.setState({
-                [subgenre.id]: false,
+                [subgenre.id]: this.props.selectedSubgenre.includes(subgenre.id),
             })
         })
     }
@@ -32,6 +33,20 @@ class Subgenre extends Component {
                 }
             })
         });
+    };
+
+    removeSubgenresFromReducer = subgenres => {
+        let keepSubgenres = [];
+        this.props.selectedSubgenre.forEach(selectedSubgenre => {
+            subgenres.forEach(subgenre => {
+                if (selectedSubgenre === subgenre.id) {
+                    keepSubgenres.push(subgenre.id);
+                }
+            })
+        });
+        if (keepSubgenres.length > 0) {
+            this.props.inputSubgenre(keepSubgenres);
+        } else this.props.inputSubgenre('remove')
     };
 
     renderSubgenres = () => {
@@ -62,13 +77,14 @@ class Subgenre extends Component {
     };
 
     addSubgenreClickHandler = () => {
+        this.props.addSubgenreSelected();
         this.props.history.push(APP_ROUTES.ADD_SUBGENRE);
     };
 
     render() {
         return (
             <React.Fragment>
-                <Header />
+                <Header/>
                 <div className={styles.Container}>
                     {
                         this.props.genre &&
@@ -95,15 +111,19 @@ Subgenre.propTypes = {
     selectedGenre: PropTypes.array,
     inputSubgenre: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
+    selectedSubgenre: PropTypes.array,
+    addSubgenreSelected: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
     genre: state.initialData.genres,
     selectedGenre: state.genreReducer.data,
+    selectedSubgenre: state.subgenreReducer.data,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     inputSubgenre,
+    addSubgenreSelected,
     history,
 }, dispatch);
 
