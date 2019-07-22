@@ -1,44 +1,27 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
+import {bindActionCreators} from 'redux';
 import Button from '@material-ui/core/Button';
 import styles from './ConfirmationDialog.scss';
-
-const MESSAGE = {
-    success: "Book successfully added!",
-    error: "Please complete the process"
-};
-
-const LABEL = {
-    success: "Add another book",
-    error: "Ok"
-};
+import {clearReducers} from "../Footer/ClearData.actions";
+import {connect} from "react-redux";
+import {withRouter} from 'react-router-dom'
 
 class ConfirmationDialog extends Component {
 
+    componentDidMount() {
+        window.scrollTo(0,0);
+    }
+
     handleOnClick = () => {
-        if(this.props.success) {
-            this.props.clearReducers();
-            this.props.onClose();
-            this.props.redirectToRoot();
-        } else {
-            this.props.onClose();
-        }
+        this.props.clearReducers();
+        this.props.history.push("/");
     };
 
     render() {
         return (
-            <Dialog
-                fullWidth={true}
-                maxWidth='sm'
-                onClose={this.props.onClose}
-                aria-labelledby="simple-dialog-title"
-                open={this.props.open}
-            >
-                <DialogTitle id="simple-dialog-title" className={styles.DialogTitle}>
-                    {this.props.success && MESSAGE.success || MESSAGE.error}
-                </DialogTitle>
+            <div className={styles.Container}>
+                <h1>Book added successfully!</h1>
                 <Button
                     className={styles.DialogButton}
                     onClick={() => this.handleOnClick()}
@@ -46,24 +29,27 @@ class ConfirmationDialog extends Component {
                     size="large"
                     color="primary"
                 >
-                    {
-                        this.props.success &&
-                        LABEL.success
-                        ||
-                        LABEL.error
-                    }
+                    Add another book
                 </Button>
-            </Dialog>
+            </div>
+
+
         )
     }
 }
 
 ConfirmationDialog.propTypes = {
-    open: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-    success: PropTypes.bool.isRequired,
+    history: PropTypes.object.isRequired,
     clearReducers: PropTypes.func.isRequired,
-    redirectToRoot: PropTypes.func.isRequired,
 };
 
-export default ConfirmationDialog;
+const mapStateToProps = state => ({
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    history,
+    clearReducers,
+}, dispatch);
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfirmationDialog));
+

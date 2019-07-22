@@ -3,9 +3,9 @@ import {BrowserRouter, Route, Switch} from "react-router-dom";
 import Loadable from 'react-loadable';
 
 import Loader from 'Common/Loader/Loader';
-import Header from 'Common/Header/Header';
 import Footer from 'Common/Footer/Footer';
 import APP_ROUTES from 'Config/appRoutes';
+import ConfirmationDialog from "./Common/ConfirmationDialog/ConfirmationDialog";
 
 
 const Genre = Loadable.Map({
@@ -62,6 +62,7 @@ class Root extends Component {
                         <Route exact path={APP_ROUTES.SUBGENRE} component={Subgenre} />
                         <Route exact path={APP_ROUTES.ADD_SUBGENRE} component={AddSubgenre} />
                         <Route exact path={APP_ROUTES.INFORMATION} component={Information} />
+                        <Route exact path={APP_ROUTES.SUCCESS} component={ConfirmationDialog} />
                     </Switch>
                     <Footer />
                 </BrowserRouter>

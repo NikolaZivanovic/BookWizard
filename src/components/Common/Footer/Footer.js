@@ -53,12 +53,10 @@ class Footer extends Component {
 
     checkIsAddDisabled = () => {
         if ((this.props.isDescriptionRequired || this.props.addSubgenre.isRequired) && this.props.information.description === "") {
-            console.log('1')
             this.setState({
                 isAddDisabled: true,
             })
         } else {
-            console.log('2')
             this.setState({
                 isAddDisabled: false,
             })
@@ -76,27 +74,18 @@ class Footer extends Component {
 
     finishButtonHandler = () => {
         // dispatch API call here and check for errors before opening success
-        this.setState(prevState => ({
-            isDialogOpen: !prevState.isDialogOpen,
-            success: true
-        }))
+        this.props.history.push('/success')
     };
 
     render() {
-        console.log(this.props.addSubgenre)
         const {pathname} = this.props.location;
-        const {isDialogOpen, success, isNextDisabled, isAddDisabled} = this.state;
+        const {isNextDisabled, isAddDisabled} = this.state;
         return (
             <div className={styles.Container}>
-                {
-                    isDialogOpen &&
-                    <ConfirmationDialog open={isDialogOpen} onClose={() => this.finishButtonHandler()} success={success}
-                                        clearReducers={() => this.props.clearReducers()}
-                                        redirectToRoot={() => this.props.history.push("/")}/>
-                }
                 <div>
                     {
                         pathname !== '/' &&
+                        pathname !== '/success' &&
                         <Button
                             onClick={() => this.backButtonHandler()}
                             variant='outlined'
@@ -109,6 +98,7 @@ class Footer extends Component {
 
                     {
                         pathname !== '/information' &&
+                        pathname !== '/success' &&
                         <Button
                             className={styles.ButtonNext}
                             onClick={() => this.nextButtonHandler()}
@@ -120,6 +110,7 @@ class Footer extends Component {
                             NEXT
                         </Button>
                         ||
+                        pathname !== '/success' &&
                         <Button
                             className={styles.ButtonNext}
                             onClick={() => this.finishButtonHandler()}
