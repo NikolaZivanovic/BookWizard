@@ -3,10 +3,10 @@ import {
     SUBGENRE_INPUT_SUCCESS,
 } from './Subgenre.actionTypes';
 
-export const inputSubgenre = (subgenreId) => dispatch => {
+export const inputSubgenre = (subgenreId, isDescReq) => dispatch => {
     dispatch({
         type: SUBGENRE_INPUT_SUCCESS,
-        payload: subgenreId,
+        payload: {subgenreId, isDescReq},
     });
 };
 

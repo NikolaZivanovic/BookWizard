@@ -198,10 +198,12 @@ class Information extends Component {
 Information.propTypes = {
     inputInformation: PropTypes.func.isRequired,
     information: PropTypes.object.isRequired,
+    isDescriptionRequired: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
     information: state.informationReducer,
+    isDescriptionRequired: state.subgenreReducer.isDescriptionRequired,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

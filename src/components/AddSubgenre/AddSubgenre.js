@@ -12,9 +12,9 @@ import Header from "../Common/Header/Header";
 class AddSubgenre extends Component {
 
     state = {
-        subgenreName: this.props.addSubgenre.name,
-        description: this.props.addSubgenre.description,
-        isRequired: this.props.addSubgenre.isRequired,
+        subgenreName: this.props.addSubgenre.subgenreName || '',
+        description: this.props.addSubgenre.description || '',
+        isRequired: this.props.addSubgenre.isRequired || false,
     };
 
     handleTextAreaInput = e => {
@@ -43,7 +43,7 @@ class AddSubgenre extends Component {
                         label="Subgenre name"
                         margin="normal"
                         variant="outlined"
-                        defaultValue={this.props.addSubgenre.name}
+                        defaultValue={this.state.subgenreName}
                     />
 
                     <TextField
@@ -55,13 +55,13 @@ class AddSubgenre extends Component {
                         rows="4"
                         margin="normal"
                         variant="outlined"
-                        defaultValue={this.props.addSubgenre.description}
+                        defaultValue={this.state.description}
                     />
 
                     <FormControlLabel
                         control={
                             <Checkbox
-                                defaultChecked={this.props.addSubgenre.isRequired}
+                                defaultChecked={this.state.isRequired}
                                 value="checkedB"
                                 onChange={() => this.handleCheckBox()}
                                 color="primary"

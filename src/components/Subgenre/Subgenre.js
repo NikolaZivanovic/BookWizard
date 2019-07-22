@@ -11,69 +11,48 @@ import Header from "../Common/Header/Header";
 
 class Subgenre extends Component {
 
-    state = {};
-
-    componentDidMount() {
-        this.removeSubgenresFromReducer(this.subgenres);
-        this.subgenres.forEach(subgenre => {
-            this.setState({
-                [subgenre.id]: this.props.selectedSubgenre.includes(subgenre.id),
-            })
-        })
-    }
-
-    mapSelectedGenres = () => {
-        this.subgenres = [];
-        this.props.selectedGenre.map(selectedGenre => {
-            this.props.genre.map(genre => {
-                if (genre.id == selectedGenre) {
-                    genre.subgenres.forEach(subgenre => {
-                        this.subgenres.push(subgenre)
-                    });
-                }
-            })
-        });
+    state = {
+        selectedSubgenre: this.createInitialState()
     };
 
-    removeSubgenresFromReducer = subgenres => {
-        let keepSubgenres = [];
-        this.props.selectedSubgenre.forEach(selectedSubgenre => {
-            subgenres.forEach(subgenre => {
-                if (selectedSubgenre === subgenre.id) {
-                    keepSubgenres.push(subgenre.id);
-                }
-            })
+     createInitialState() {
+        if(this.props.selectedSubgenre !== null) {
+            return this.props.selectedSubgenre;
+        }
+        return null;
+    };
+
+    getSubgenres = () => {
+        let subgenres = null;
+        this.props.genre.forEach(genre => {
+            if(genre.id.toString() === this.props.selectedGenre) subgenres = genre.subgenres;
         });
-        if (keepSubgenres.length > 0) {
-            this.props.inputSubgenre(keepSubgenres);
-        } else this.props.inputSubgenre('remove')
+        return subgenres;
     };
 
     renderSubgenres = () => {
-        this.mapSelectedGenres();
-
-        return this.subgenres.map(subgenre => (
+        return this.getSubgenres().map(subgenre => (
             <Button
                 className={styles.SubgenreButton}
                 key={subgenre.id}
                 value={subgenre.id}
-                onClick={e => this.selectSubgenreClickHandler(e)}
-                variant={this.state[subgenre.id] && 'contained' || 'outlined'}
+                onClick={e => this.selectSubgenreClickHandler(e, subgenre.isDescriptionRequired)}
+                variant={this.state.selectedSubgenre === subgenre.id.toString() && 'contained' || 'outlined'}
                 size="large"
                 color="primary"
+                disabled={this.props.isAddSubgenreSelected}
             >
                 {subgenre.name}
             </Button>
         ))
     };
 
-    selectSubgenreClickHandler = e => {
-        this.props.inputSubgenre(e.currentTarget.value);
-
+    selectSubgenreClickHandler = (e, isDescriptionRequired) => {
         const {value} = e.currentTarget;
-        this.setState(prevState => ({
-            [value]: !prevState[value],
-        }))
+        this.props.inputSubgenre(value, isDescriptionRequired);
+        this.setState({
+            selectedSubgenre: value
+        })
     };
 
     addSubgenreClickHandler = () => {
@@ -97,6 +76,8 @@ class Subgenre extends Component {
                         variant='contained'
                         size="large"
                         color="primary"
+                        disabled={this.state.selectedSubgenre !== null}
+
                     >
                         Add Subgenre
                     </Button>
@@ -108,17 +89,19 @@ class Subgenre extends Component {
 
 Subgenre.propTypes = {
     genre: PropTypes.array.isRequired,
-    selectedGenre: PropTypes.array,
+    selectedGenre: PropTypes.string.isRequired,
     inputSubgenre: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    selectedSubgenre: PropTypes.array,
+    selectedSubgenre: PropTypes.string,
     addSubgenreSelected: PropTypes.func.isRequired,
+    isAddSubgenreSelected: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
     genre: state.initialData.genres,
     selectedGenre: state.genreReducer.data,
     selectedSubgenre: state.subgenreReducer.data,
+    isAddSubgenreSelected: state.subgenreReducer.isAddSubgenreSelected,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

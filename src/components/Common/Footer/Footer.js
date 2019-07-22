@@ -1,23 +1,69 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { locationHelper } from './locationHelper';
+import {locationHelper} from './locationHelper';
 import styles from './Footer.scss';
 import {withRouter} from 'react-router-dom'
 import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
-import { INIT_STATE_GENRE } from "../../Genre/Genre.reducer";
-import { INIT_STATE_SUBGENRE } from "../../Subgenre/Subgenre.reducer";
-import { INIT_STATE_ADD_SUBGENRE } from "../../AddSubgenre/AddSubgenre.reducer";
-import { INIT_STATE_INFORMATION } from "../../Information/Information.reducer";
-import { clearReducers } from "./ClearData.actions";
+import {clearReducers} from "./ClearData.actions";
 
 class Footer extends Component {
 
     state = {
         isDialogOpen: false,
         success: false,
+        isNextDisabled: true,
+    };
+
+    componentDidUpdate(prevProps) {
+        if (prevProps !== this.props) {
+            switch (this.props.location.pathname) {
+                case '/': {
+                    this.checkIsNextDisabled(this.props.genre);
+                    break;
+                }
+                case '/subgenre': {
+                    this.checkIsNextDisabled(this.props.subgenre);
+                    break;
+                }
+                case '/add_subgenre': {
+                    this.checkIsNextDisabled(this.props.addSubgenre);
+                    break;
+                }
+                case '/information': {
+                    this.checkIsAddDisabled();
+                }
+            }
+        }
+    }
+
+    checkIsNextDisabled = data => {
+        if (data !== null) {
+            this.setState({
+                isNextDisabled: false,
+            })
+        } else {
+            this.setState({
+                isNextDisabled: true,
+            })
+        }
+    };
+
+    checkIsAddDisabled = () => {
+        if ((this.props.isDescriptionRequired || this.props.addSubgenre.isRequired) && this.props.information.description === "") {
+            console.log('1')
+            this.setState({
+                isAddDisabled: true,
+            })
+        } else {
+            console.log('2')
+            this.setState({
+                isAddDisabled: false,
+            })
+        }
+
     };
 
     nextButtonHandler = () => {
@@ -29,57 +75,25 @@ class Footer extends Component {
     };
 
     finishButtonHandler = () => {
-        if(this.isProcessComplete()){
-            // dispatch API call here and check for errors before opening success
-            this.setState(prevState => ({
-                isDialogOpen: !prevState.isDialogOpen,
-                success: true
-            }))
-        } else {
-            this.setState(prevState => ({
-                isDialogOpen: !prevState.isDialogOpen,
-            }))
-        }
-    };
-
-    isGenreInputComplete = () => {
-        return this.props.genre === INIT_STATE_GENRE.data;
-    };
-
-    isSubgenreInputComplete = () => {
-        if(this.props.subgenre !== INIT_STATE_SUBGENRE.data || this.props.addSubgenre !== INIT_STATE_ADD_SUBGENRE.data) {
-            return false
-        }
-        return true;
-    };
-
-    isInformationInputComplete = () => {
-        return this.props.information === INIT_STATE_INFORMATION;
-    };
-
-    isProcessComplete = () => {
-        return this.isGenreInputComplete() === false && this.isSubgenreInputComplete() === false && this.isInformationInputComplete() === false;
+        // dispatch API call here and check for errors before opening success
+        this.setState(prevState => ({
+            isDialogOpen: !prevState.isDialogOpen,
+            success: true
+        }))
     };
 
     render() {
-        const { pathname } = this.props.location;
-        const { isDialogOpen, success } = this.state;
+        console.log(this.props.addSubgenre)
+        const {pathname} = this.props.location;
+        const {isDialogOpen, success, isNextDisabled, isAddDisabled} = this.state;
         return (
             <div className={styles.Container}>
                 {
                     isDialogOpen &&
-                        <ConfirmationDialog open={isDialogOpen} onClose={() => this.finishButtonHandler()} success={success} clearReducers={() => this.props.clearReducers()} redirectToRoot={() => this.props.history.push("/")}/>
+                    <ConfirmationDialog open={isDialogOpen} onClose={() => this.finishButtonHandler()} success={success}
+                                        clearReducers={() => this.props.clearReducers()}
+                                        redirectToRoot={() => this.props.history.push("/")}/>
                 }
-                <div>
-                    <Button
-                        onClick={() => this.finishButtonHandler()}
-                        variant='contained'
-                        size="large"
-                        color="primary"
-                    >
-                        FINISH
-                    </Button>
-                </div>
                 <div>
                     {
                         pathname !== '/' &&
@@ -101,9 +115,22 @@ class Footer extends Component {
                             variant='contained'
                             size="large"
                             color="primary"
+                            disabled={isNextDisabled}
                         >
                             NEXT
                         </Button>
+                        ||
+                        <Button
+                            className={styles.ButtonNext}
+                            onClick={() => this.finishButtonHandler()}
+                            variant='contained'
+                            size="large"
+                            color="primary"
+                            disabled={isAddDisabled}
+                        >
+                            ADD
+                        </Button>
+
                     }
                 </div>
             </div>
@@ -113,12 +140,13 @@ class Footer extends Component {
 
 Footer.propTypes = {
     history: PropTypes.object.isRequired,
-    genre: PropTypes.array,
-    subgenre: PropTypes.array,
+    genre: PropTypes.string,
+    subgenre: PropTypes.string,
     addSubgenre: PropTypes.object,
     information: PropTypes.object,
     clearReducers: PropTypes.func.isRequired,
     location: PropTypes.object.isRequired,
+    isDescriptionRequired: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -126,11 +154,12 @@ const mapStateToProps = state => ({
     subgenre: state.subgenreReducer.data,
     addSubgenre: state.addSubgenreReducer.data,
     information: state.informationReducer,
+    isDescriptionRequired: state.subgenreReducer.isDescriptionRequired,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators( {
+const mapDispatchToProps = dispatch => bindActionCreators({
     history,
     clearReducers,
-}, dispatch );
+}, dispatch);
 
-export default withRouter(connect( mapStateToProps, mapDispatchToProps )( Footer ));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Footer));

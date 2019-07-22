@@ -9,23 +9,26 @@ import Header from "../Common/Header/Header";
 
 class Genre extends Component {
 
-    state = {};
+    state = {
+        selectedGenre: this.createInitialState()
+    };
 
     componentDidMount() {
-        this.props.genre.forEach(genre => {
-            this.setState({
-                [genre.id]: this.props.selectedGenre.includes(genre.id.toString()),
-            })
-        })
+        window.scrollTo(0, 0);
     }
+
+    createInitialState() {
+        if(this.props.selectedGenre !== null) {
+            return this.props.selectedGenre;
+        }
+        return null;
+    };
 
     selectGenreClickHandler = e => {
         this.props.inputGenre(e.currentTarget.value);
-
-        const {value} = e.currentTarget;
-        this.setState(prevState => ({
-            [value]: !prevState[value],
-        }))
+        this.setState({
+            selectedGenre: e.currentTarget.value
+        })
     };
 
     renderGenres = () => {
@@ -34,7 +37,7 @@ class Genre extends Component {
                 key={genre.id}
                 value={genre.id}
                 onClick={e => this.selectGenreClickHandler(e)}
-                variant={this.state[genre.id] && 'contained' || 'outlined'}
+                variant={this.state.selectedGenre === genre.id.toString() && 'contained' || 'outlined'}
                 size="large"
                 color="primary"
             >
@@ -61,7 +64,7 @@ class Genre extends Component {
 Genre.propTypes = {
     genre: PropTypes.array.isRequired,
     inputGenre: PropTypes.func.isRequired,
-    selectedGenre: PropTypes.array,
+    selectedGenre: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
