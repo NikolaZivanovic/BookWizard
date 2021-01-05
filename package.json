@@ -42,7 +42,7 @@
     "dependencies": {
         "@material-ui/core": "4.2.0",
         "@material-ui/styles": "4.2.0",
-        "axios": "0.18.0",
+        "axios": "0.21.1",
         "informed": "1.10.7",
         "lodash": "4.17.10",
         "moment": "2.22.2",
