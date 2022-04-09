@@ -45,7 +45,7 @@
         "axios": "0.18.0",
         "informed": "1.10.7",
         "lodash": "4.17.10",
-        "moment": "2.22.2",
+        "moment": "2.29.2",
         "node-polyglot": "2.3.0",
         "object-assign": "4.1.0",
         "react": "^16.8.6",
